@@ -55,6 +55,6 @@ elif [[ "$COMMAND" =~ .*"docker".* ]]; then
   sudo -E keploy test -c "${COMMAND}" --delay ${DELAY} --path "${KEPLOY_PATH}" --buildDelay ${BUILD_DELAY}
 
 else
-  echo "Language not found"
-  echo 'Test Mode Shutting 🎉'
+echo "Language not found, but proceeding anyway."
+
 fi
