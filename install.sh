@@ -18,6 +18,8 @@ if [[ "$COMMAND" =~ .*"go".* ]]; then
   echo "go is present."
   go mod download
   go build -o application
+  echo 'Record Mode Starting 🎥'
+  sudo -E keploy record -c "${COMMAND}" --delay ${DELAY} --path "${KEPLOY_PATH}"
   echo 'Test Mode Starting 🎉'
   echo sudo -E keploy test -c "./application" --delay ${DELAY} --path "${KEPLOY_PATH}"
   sudo -E keploy test -c "./application" --delay ${DELAY} --path "${KEPLOY_PATH}"
@@ -25,6 +27,8 @@ if [[ "$COMMAND" =~ .*"go".* ]]; then
 elif [[ "$COMMAND" =~ .*"node".* ]]; then
   echo "Node is present."
   npm install
+  echo 'Record Mode Starting 🎥'
+sudo -E keploy record -c "${COMMAND}" --delay ${DELAY} --path "${KEPLOY_PATH}"
   echo 'Test Mode Starting 🎉'
   echo sudo -E keploy test -c "${COMMAND}" --delay ${DELAY} --path "${KEPLOY_PATH}"
   sudo -E keploy test -c "${COMMAND}" --delay ${DELAY} --path "${KEPLOY_PATH}"
@@ -32,6 +36,8 @@ elif [[ "$COMMAND" =~ .*"node".* ]]; then
 elif [[ "$COMMAND" =~ .*"java".* ]]  || [[ "$COMMAND" =~ .*"mvn".* ]]; then
   echo "Java is present."
   mvn clean install
+  echo 'Record Mode Starting 🎥'
+sudo -E keploy record -c "${COMMAND}" --delay ${DELAY} --path "${KEPLOY_PATH}"
   echo 'Test Mode Starting 🎉'
   echo sudo -E keploy test -c "${COMMAND}" --delay ${DELAY} --path "${KEPLOY_PATH}"
   sudo -E keploy test -c "${COMMAND}" --delay ${DELAY} --path "${KEPLOY_PATH}"
@@ -39,18 +45,24 @@ elif [[ "$COMMAND" =~ .*"java".* ]]  || [[ "$COMMAND" =~ .*"mvn".* ]]; then
 elif [[ "$COMMAND" =~ .*"python".* ]] || [[ "$COMMAND" =~ .*"python3".* ]]; then
   echo "Python is present."
   pip install -r requirements.txt
+  echo 'Record Mode Starting 🎥'
+sudo -E keploy record -c "${COMMAND}" --delay ${DELAY} --path "${KEPLOY_PATH}"
   echo 'Test Mode Starting 🎉'
   echo sudo -E keploy test -c "${COMMAND}" --delay ${DELAY} --path "${KEPLOY_PATH}"
   sudo -E keploy test -c "${COMMAND}" --delay ${DELAY} --path "${KEPLOY_PATH}"
 
 elif [[ "$COMMAND" =~ .*"docker-compose".* ]] || [[ "$COMMAND" =~ .*"docker compose".* ]]; then
   echo "Docker compose is present."
+  echo 'Record Mode Starting 🎥'
+sudo -E keploy record -c "${COMMAND}" --delay ${DELAY} --path "${KEPLOY_PATH}"
   echo 'Test Mode Starting 🎉'
   echo sudo -E keploy test -c "${COMMAND}" --delay ${DELAY} --path "${KEPLOY_PATH}" --containerName "${CONTAINER_NAME}" --buildDelay ${BUILD_DELAY}
   sudo -E keploy test -c "${COMMAND}" --delay ${DELAY} --path "${KEPLOY_PATH}" --containerName "${CONTAINER_NAME}" --buildDelay ${BUILD_DELAY}
 
 elif [[ "$COMMAND" =~ .*"docker".* ]]; then
   echo "Docker is present."
+  echo 'Record Mode Starting 🎥'
+sudo -E keploy record -c "${COMMAND}" --delay ${DELAY} --path "${KEPLOY_PATH}"
   echo 'Test Mode Starting 🎉'
   echo sudo -E keploy test -c "${COMMAND}" --delay ${DELAY} --path "${KEPLOY_PATH}" --buildDelay ${BUILD_DELAY}
   sudo -E keploy test -c "${COMMAND}" --delay ${DELAY} --path "${KEPLOY_PATH}" --buildDelay ${BUILD_DELAY}
