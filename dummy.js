@@ -1,2 +1,2 @@
 // test dummy file
-console.log("Hi Lint test ");
+console.log("Hi Lint  ");
