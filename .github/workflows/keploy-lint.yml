@@ -54,7 +54,7 @@ jobs:
             };
             console.log("PR Metadata:", metadata);
             return metadata;
-        result-encoding: json
+     
 
       - name: Detect Programming Languages
         id: lang-detect
