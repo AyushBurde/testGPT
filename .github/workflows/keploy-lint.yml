@@ -17,7 +17,7 @@ jobs:
         uses: AyushBurde/testGpt  # Update this
         with:
           working-directory: ./
-          command: './myapp'
+          command: 'node dummy.js'
           keploy-path: ./
           delay: 10
 
