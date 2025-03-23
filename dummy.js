@@ -1,2 +1,2 @@
 // test dummy file
-console.log("Hello TestGPT Lint");
+console.log("Hi TestGPT Lint");
