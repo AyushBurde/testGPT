@@ -69,14 +69,120 @@ runs:
           exit 1
         fi
       shell: bash
-      
 
-    - name: Comment on PR
-      if: success()
-      uses: actions/github-script@v6
-      env:
+      -name: Fetch PR Details
+  id: pr-details
+  uses: actions/github-script@v6
+  with:
+    github-token: ${{ github.token }}
+    script: |
+      const pr = context.payload.pull_request;
+
+      if (!pr) {
+        console.log("Not a PR event.");
+        return;
+      }
+
+      const prDetails = await github.rest.pulls.get({
+        owner: context.repo.owner,
+        repo: context.repo.repo,
+        pull_number: pr.number,
+      });
+
+      const changedFiles = await github.paginate(github.rest.pulls.listFiles, {
+        owner: context.repo.owner,
+        repo: context.repo.repo,
+        pull_number: pr.number,
+        per_page: 100,
+      });
+
+      const filePaths = changedFiles.map(file => file.filename);
+      console.log("Changed Files:", filePaths);
+
+      const metadata = {
+        title: pr.title,
+        author: pr.user.login,
+        files: filePaths
+      };
+
+      console.log("PR Metadata:", metadata);
+      return metadata;
+  result-encoding: json
+
+      
+-name: Detect Programming Languages
+id: lang-detect
+run: |
+    echo "Detecting languages..."
+    files=$(echo '${{ steps.pr-details.outputs.result }}' | jq -r '.files[]')
+
+    touch languages.txt
+    for file in $files; do
+      ext="${file##*.}"
+      case "$ext" in
+        js|ts) echo "JavaScript" >> languages.txt ;;
+        go) echo "Go" >> languages.txt ;;
+        py) echo "Python" >> languages.txt ;;
+        *) echo "Unknown" >> languages.txt ;;
+      esac
+    done
+
+    echo "Languages detected:"
+    cat languages.txt
+shell: bash
+
+-name: Lint Changed Files
+run: |
+    echo "Running linters..."
+    files=$(echo '${{ steps.pr-details.outputs.result }}' | jq -r '.files[]')
+    touch lint_report.txt
+
+    for file in $files; do
+      ext="${file##*.}"
+      if [[ "$ext" == "js" || "$ext" == "ts" ]]; then
+        echo "Linting $file with ESLint..." >> lint_report.txt
+        eslint "$file" >> lint_report.txt 2>&1 || echo "Errors in $file" >> lint_report.txt
+      elif [[ "$ext" == "go" ]]; then
+        echo "Linting $file with Golint..." >> lint_report.txt
+        golint "$file" >> lint_report.txt 2>&1
+      else
+        echo "No linter for $file" >> lint_report.txt
+      fi
+    done
+
+    cat lint_report.txt
+shell: bash
+
+
+-name: Comment Lint Results on PR
+uses: actions/github-script@v6
+with:
+    github-token: ${{ github.token }}
+    script: |
+      const fs = require('fs');
+      const lintReport = fs.readFileSync('lint_report.txt', 'utf8');
+      const pr = context.payload.pull_request;
+
+      if (!pr) {
+        console.log("No PR context.");
+        return;
+      }
+
+      github.rest.issues.createComment({
+        issue_number: pr.number,
+        owner: context.repo.owner,
+        repo: context.repo.repo,
+        body: `### 🧹 Lint Report:\n\`\`\`\n${lintReport}\n\`\`\``
+      });
+
+
+
+    -name: Comment on PR
+    if: success()
+    uses: actions/github-script@v6
+    env:
         KEPLOY_REPORT: ${{ steps.keploy-test-report.outputs.KEPLOY_REPORT }}
-      with:
+    with:
         github-token: ${{ github.token }}
         script: |
           if (!process.env.KEPLOY_REPORT) {
