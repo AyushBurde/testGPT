@@ -13,10 +13,11 @@ jobs:
         uses: actions/checkout@v3
 
       - name: Run Keploy TestGPT Action
-        uses: your-username/your-repo-name@main  # Update this
+        id: keploy-test-report
+        uses: AyushBurde/testGpt  # Update this
         with:
           working-directory: ./
-          command: 'your-start-command-here'
+          command: './myapp'
           keploy-path: ./
           delay: 10
 
