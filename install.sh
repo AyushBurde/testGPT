@@ -18,6 +18,8 @@ if [[ "$COMMAND" =~ .*"go".* ]]; then
   echo "go is present."
   go mod download
   go build -o application
+    echo "Starting Server in Background"
+  ${COMMAND} &  # this runs `node dummy.js` in the background
   sleep 3 
   curl 127.0.0.1:3000
   echo 'Record Mode Starting 🎥'
@@ -29,6 +31,7 @@ if [[ "$COMMAND" =~ .*"go".* ]]; then
 elif [[ "$COMMAND" =~ .*"node".* ]]; then
   echo "Node is present."
   npm install
+    ${COMMAND} & 
    sleep 3 
   curl 127.0.0.1:3000
   echo 'Record Mode Starting 🎥'
@@ -40,6 +43,7 @@ sudo -E keploy record -c "${COMMAND}" --delay ${DELAY} --path "${KEPLOY_PATH}"
 elif [[ "$COMMAND" =~ .*"java".* ]]  || [[ "$COMMAND" =~ .*"mvn".* ]]; then
   echo "Java is present."
   mvn clean install
+    ${COMMAND} & 
    sleep 3 
   curl 127.0.0.1:3000
   echo 'Record Mode Starting 🎥'
@@ -51,6 +55,7 @@ sudo -E keploy record -c "${COMMAND}" --delay ${DELAY} --path "${KEPLOY_PATH}"
 elif [[ "$COMMAND" =~ .*"python".* ]] || [[ "$COMMAND" =~ .*"python3".* ]]; then
   echo "Python is present."
   pip install -r requirements.txt
+    ${COMMAND} & 
    sleep 3 
   curl 127.0.0.1:3000
   echo 'Record Mode Starting 🎥'
@@ -61,6 +66,7 @@ sudo -E keploy record -c "${COMMAND}" --delay ${DELAY} --path "${KEPLOY_PATH}"
 
 elif [[ "$COMMAND" =~ .*"docker-compose".* ]] || [[ "$COMMAND" =~ .*"docker compose".* ]]; then
   echo "Docker compose is present."
+    ${COMMAND} & 
    sleep 3 
   curl 127.0.0.1:3000
   echo 'Record Mode Starting 🎥'
@@ -71,6 +77,7 @@ sudo -E keploy record -c "${COMMAND}" --delay ${DELAY} --path "${KEPLOY_PATH}"
 
 elif [[ "$COMMAND" =~ .*"docker".* ]]; then
   echo "Docker is present."
+    ${COMMAND} & 
    sleep 3 
   curl 127.0.0.1:3000
   echo 'Record Mode Starting 🎥'
