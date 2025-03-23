@@ -1,2 +1,1 @@
-// test dummy file
-console.log("Hi Lint  ");
+console.log("Hello from Dummy.js — Testing Keploy!");
