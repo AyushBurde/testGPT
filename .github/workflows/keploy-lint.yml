@@ -14,7 +14,7 @@ jobs:
 
       - name: Run Keploy TestGPT Action
         id: keploy-test-report
-        uses: AyushBurde/testGpt  # Update this
+        uses: AyushBurde/testGPT@main  # Update this
         with:
           working-directory: ./
           command: 'node dummy.js'
