@@ -56,5 +56,3 @@ elif [[ "$COMMAND" =~ .*"docker".* ]]; then
 
 else
 echo "Language not found, but proceeding anyway."
-
-fi
