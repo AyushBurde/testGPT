@@ -1,0 +1,29 @@
+# name: Test TestGPT Lint + Static Analysis
+
+# on:
+#   pull_request:
+#     types: [opened, synchronize, reopened]
+
+# jobs:
+#   run-testgpt:
+#     runs-on: ubuntu-latest
+
+#     steps:
+#       - name: Checkout Code
+#         uses: actions/checkout@v2
+
+#       # 👇 Add this to test your custom TestGPT Action locally
+#       - name: Run Custom TestGPT Action
+#         uses: ./  # This refers to the action.yml in the root directory
+#         with:
+#           working-directory: ./
+#           keploy-path: ./
+#           command: "echo Hello from TestGPT!"
+
+#       # Optional: Show files changed in PR (testing GitHub API call)
+#       - name: Show Changed Files
+#         run: |
+#           echo "Fetching changed files..."
+#           curl -s -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
+#           https://api.github.com/repos/${{ github.repository }}/pulls/${{ github.event.pull_request.number }}/files \
+#           | jq '.[].filename'
