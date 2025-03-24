@@ -14,11 +14,11 @@ jobs:
 
       - name: Run Keploy TestGPT Action
         id: keploy-test-report
-        uses: AyushBurde/testGPT@main  # Update this
+        uses: keploy/testGPT@main  
         with:
-          working-directory: ./
-          command: 'node dummy.js'
-          keploy-path: ./
+          working-directory: ./ # Adjust if project structure differs
+          command: 'your-test-command-here' # Update this
+          keploy-path: ./  # Path where Keploy binary is installed
           delay: 10
 
     
