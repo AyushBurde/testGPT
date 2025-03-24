@@ -55,9 +55,7 @@ jobs:
             console.log("PR Metadata:", metadata);
             
             return metadata;
-        result-encoding: string
-        outputs:
-          result: ${{ steps.pr-details.outputs.result }}
+    
      
 
       - name: Detect Programming Languages
