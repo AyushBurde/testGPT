@@ -71,9 +71,24 @@ done
 
 wait $RECORD_PID
 
-# Check if test-sets are recorded
+# Retry recording if no test-sets are found
 if [ ! -d "${KEPLOY_PATH}" ] || [ -z "$(ls -A "${KEPLOY_PATH}")" ]; then
-  echo " No test-sets found in ${KEPLOY_PATH}. Recording failed."
+  echo "No test-sets found in ${KEPLOY_PATH}. Retrying recording..."
+  sudo -E keploy record -c "${APP_COMMAND}" --delay ${DELAY} --path "${KEPLOY_PATH}" > keploy_record_retry.log 2>&1 &
+  RECORD_PID=$!
+  sleep 5
+
+  for i in {1..3}; do
+    curl http://127.0.0.1:${APP_PORT:-3000} || echo "Retry request $i failed"
+    sleep 1
+  end
+
+  wait $RECORD_PID
+fi
+
+# Final check if test-sets are recorded
+if [ ! -d "${KEPLOY_PATH}" ] || [ -z "$(ls -A "${KEPLOY_PATH}")" ]; then
+  echo "No test-sets found in ${KEPLOY_PATH} after retry. Recording failed."
   exit 1
 fi
 
